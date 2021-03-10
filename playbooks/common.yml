@@ -6,6 +6,7 @@
 #  - MKFS.XFS: https://docs.ansible.com/ansible/2.9/modules/filesystem_module.html
 #  - MKDIR and CHMOD a+rwx: https://docs.ansible.com/ansible/2.9/modules/file_module.html
 #  - SYSTEMCTL START|ENABLE services: https://docs.ansible.com/ansible/2.9/modules/service_module.html
+#  - UPDATING MOUNTPOINTS TO /etc/exports: https://docs.ansible.com/ansible/2.9/modules/blockinfile_module.html#blockinfile-module
 
 - name: Configure NFS server
   hosts: nfs
@@ -169,3 +170,14 @@
       src: /dev/nfs_vg/lv-logs
       fstype: xfs
       state: mounted
+
+
+#  - UPDATING MOUNTPOINTS TO /etc/exports: https://docs.ansible.com/ansible/2.9/modules/blockinfile_module.html#blockinfile-module
+  - name: Insert/Update eth0 configuration stanza in /etc/network/interfaces
+          (it might be better to copy files into /etc/network/interfaces.d/)
+    blockinfile:
+      path: /etc/exports
+      block: |
+        /mnt/html *(rw,sync,no_root_squash)
+        /mnt/logs *(rw,sync,no_root_squash)
+        /mnt/opt *(rw,sync,no_root_squash)
