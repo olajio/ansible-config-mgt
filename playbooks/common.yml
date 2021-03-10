@@ -1,0 +1,51 @@
+#This play book performs the following:
+#  - Created partitions: https://docs.ansible.com/ansible/2.9/modules/parted_module.html
+#  - Create physical volumes and volume groups: https://docs.ansible.com/ansible/2.9/modules/lvg_module.html
+- name: Configure NFS server
+  hosts: nfs
+  become: yes
+  gather_facts: yes
+
+  tasks:
+  - name: Install required packages #https://docs.ansible.com/ansible/2.9/modules/yum_module.html
+    yum:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+      - lvm2
+      - nfs-utils
+      - libnfsidmap
+      - firewalld
+      - git
+
+
+  - name: Create a new primary partition for LVM in /dev/xvdb
+    parted:
+        device: /dev/xvdb
+        number: 1
+        flags: [ lvm ]
+        state: present
+
+
+  - name: Create a new primary partition for LVM in /dev/xvdc
+    parted:
+        device: /dev/xvdc
+        number: 1
+        flags: [ lvm ]
+        state: present
+
+
+  - name: Create a new primary partition for LVM in /dev/xvdd
+    parted:
+        device: /dev/xvdd
+        number: 1
+        flags: [ lvm ]
+        state: present
+
+
+  - name: Create or resize a volume group on top of /dev/xvdb1,/dev/xvdc1,/dev/xvdd1
+    lvg:
+        vg: vg.services
+        pvs: /dev/xvdb1,/dev/xvdc1,/dev/xvdd1
