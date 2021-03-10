@@ -4,6 +4,7 @@
 #  - VGCREATE: Create physical volumes and volume groups: https://docs.ansible.com/ansible/2.9/modules/lvg_module.html
 #  - LVCREATE: https://docs.ansible.com/ansible/2.9/modules/lvol_module.html
 #  - MKFS.XFS: https://docs.ansible.com/ansible/2.9/modules/filesystem_module.html
+#  - MKDIR and CHMOD a+rwx: https://docs.ansible.com/ansible/2.9/modules/file_module.html
 
 - name: Configure NFS server
   hosts: nfs
@@ -94,3 +95,23 @@
     filesystem:
       fstype: xfs
       dev: /dev/nfs_vg/lv-logs
+
+
+#  - MKDIR and CHMOD a+rwx: https://docs.ansible.com/ansible/2.9/modules/file_module.html
+  - name: Make directory /mnt/html
+    file:
+      path: /mnt/html
+      state: directory
+      mode: '0777'
+
+  - name: Make directory /mnt/logs
+    file:
+      path: /mnt/logs
+      state: directory
+      mode: '0777'
+
+  - name: Make directory /mnt/opt
+    file:
+      path: /mnt/opt
+      state: directory
+      mode: '0777'
