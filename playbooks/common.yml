@@ -3,15 +3,15 @@
 #  - FDISK: Created partitions: https://docs.ansible.com/ansible/2.9/modules/parted_module.html
 #  - VGCREATE: Create physical volumes and volume groups: https://docs.ansible.com/ansible/2.9/modules/lvg_module.html
 #  - LVCREATE: https://docs.ansible.com/ansible/2.9/modules/lvol_module.html
+#  - MKFS.XFS: https://docs.ansible.com/ansible/2.9/modules/filesystem_module.html
 
-
-#  - YUM: https://docs.ansible.com/ansible/2.9/modules/yum_module.html
 - name: Configure NFS server
   hosts: nfs
   become: yes
   gather_facts: yes
 
   tasks:
+
   - name: Install required packages #https://docs.ansible.com/ansible/2.9/modules/yum_module.html
     yum:
       name: "{{ packages }}"
@@ -77,3 +77,20 @@
       vg: nfs_vg
       lv: lv-logs
       size: 4.9g
+
+#Use mkfs.xfs to format the logical volume with Xfs filesystem
+#  - MKFS.XFS: https://docs.ansible.com/ansible/2.9/modules/filesystem_module.html
+  - name: Create a xfs filesystem on /dev/nfs_vg/lv-opt
+    filesystem:
+      fstype: xfs
+      dev: /dev/nfs_vg/lv-opt
+
+  - name: Create a xfs filesystem on /dev/nfs_vg/lv-apps
+    filesystem:
+      fstype: xfs
+      dev: /dev/nfs_vg/lv-apps
+
+  - name: Create a xfs filesystem on /dev/nfs_vg/lv-logs
+    filesystem:
+      fstype: xfs
+      dev: /dev/nfs_vg/lv-logs
