@@ -1,7 +1,11 @@
 #This play book performs the following:
+#  - YUM: https://docs.ansible.com/ansible/2.9/modules/yum_module.html
 #  - FDISK: Created partitions: https://docs.ansible.com/ansible/2.9/modules/parted_module.html
 #  - VGCREATE: Create physical volumes and volume groups: https://docs.ansible.com/ansible/2.9/modules/lvg_module.html
-#  -
+#  - LVCREATE: https://docs.ansible.com/ansible/2.9/modules/lvol_module.html
+
+
+#  - YUM: https://docs.ansible.com/ansible/2.9/modules/yum_module.html
 - name: Configure NFS server
   hosts: nfs
   become: yes
@@ -22,6 +26,7 @@
       - git
 
 
+#  - FDISK: Created partitions: https://docs.ansible.com/ansible/2.9/modules/parted_module.html
   - name: Create a new primary partition for LVM in /dev/xvdb
     parted:
         device: /dev/xvdb
@@ -46,11 +51,14 @@
         state: present
 
 
+#  - VGCREATE: Create physical volumes and volume groups: https://docs.ansible.com/ansible/2.9/modules/lvg_module.html
   - name: VGCREATE to Create or resize a volume group on top of /dev/xvdb1,/dev/xvdc1,/dev/xvdd1
     lvg:
         vg: nfs_vg
         pvs: /dev/xvdb1,/dev/xvdc1,/dev/xvdd1
 
+
+#  - LVCREATE: https://docs.ansible.com/ansible/2.9/modules/lvol_module.html
   - name: Create a logical volume lv-opt of 5GiB
     lvol:
       vg: nfs_vg
