@@ -1,6 +1,7 @@
 #This play book performs the following:
-#  - Created partitions: https://docs.ansible.com/ansible/2.9/modules/parted_module.html
-#  - Create physical volumes and volume groups: https://docs.ansible.com/ansible/2.9/modules/lvg_module.html
+#  - FDISK: Created partitions: https://docs.ansible.com/ansible/2.9/modules/parted_module.html
+#  - VGCREATE: Create physical volumes and volume groups: https://docs.ansible.com/ansible/2.9/modules/lvg_module.html
+#  -
 - name: Configure NFS server
   hosts: nfs
   become: yes
@@ -45,7 +46,26 @@
         state: present
 
 
-  - name: Create or resize a volume group on top of /dev/xvdb1,/dev/xvdc1,/dev/xvdd1
+  - name: VGCREATE to Create or resize a volume group on top of /dev/xvdb1,/dev/xvdc1,/dev/xvdd1
     lvg:
-        vg: vg.services
+        vg: nfs_vg
         pvs: /dev/xvdb1,/dev/xvdc1,/dev/xvdd1
+
+  - name: Create a logical volume lv-opt of 5GiB
+    lvol:
+      vg: nfs_vg
+      lv: lv-opt
+      size: 5g
+
+  - name: Create a logical volume lv-apps of 5GiB
+    lvol:
+      vg: nfs_vg
+      lv: lv-apps
+      size: 5g
+
+
+  - name: Create a logical volume lv-logs of 5GiB
+    lvol:
+      vg: nfs_vg
+      lv: lv-logs
+      size: 4.9g
