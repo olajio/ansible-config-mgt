@@ -115,3 +115,27 @@
       path: /mnt/opt
       state: directory
       mode: '0777'
+
+
+#  - MOUNT DIRECTORIES TO LOGICAL VOLUMES: https://docs.ansible.com/ansible/2.9/modules/mount_module.html
+  - name: Mount /mnt/html to /dev/nfs_vg/lv-apps
+    mount:
+      path: /mnt/html
+      src: /dev/nfs_vg/lv-apps
+      fstype: xfs
+      state: mounted
+
+  - name: Mount /mnt/html to /dev/nfs_vg/lv-opt
+    mount:
+      path: /mnt/opt
+      src: /dev/nfs_vg/lv-opt
+      fstype: xfs
+      state: mounted
+
+
+  - name: Mount /mnt/html to /dev/nfs_vg/lv-logs
+    mount:
+      path: /mnt/logs
+      src: /dev/nfs_vg/lv-logs
+      fstype: xfs
+      state: mounted
