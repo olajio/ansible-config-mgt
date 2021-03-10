@@ -5,6 +5,7 @@
 #  - LVCREATE: https://docs.ansible.com/ansible/2.9/modules/lvol_module.html
 #  - MKFS.XFS: https://docs.ansible.com/ansible/2.9/modules/filesystem_module.html
 #  - MKDIR and CHMOD a+rwx: https://docs.ansible.com/ansible/2.9/modules/file_module.html
+#  - SYSTEMCTL START|ENABLE services: https://docs.ansible.com/ansible/2.9/modules/service_module.html
 
 - name: Configure NFS server
   hosts: nfs
@@ -25,6 +26,35 @@
       - libnfsidmap
       - firewalld
       - git
+
+
+#  - SYSTEMCTL START|ENABLE services: https://docs.ansible.com/ansible/2.9/modules/service_module.html
+  - name: Start service rpcbind, if not started
+    service:
+      name: rpcbind
+      state: started
+      enabled: yes
+
+
+  - name: Start service nfs-server, if not started
+    service:
+      name: nfs-server
+      state: started
+      enabled: yes
+
+
+  - name: Start service rpc-statd, if not started
+    service:
+      name: rpc-statd
+      state: started
+      enabled: yes
+
+
+  - name: Start service nfs-idmapd, if not started
+    service:
+      name: nfs-idmapd
+      state: started
+      enabled: yes
 
 
 #  - FDISK: Created partitions: https://docs.ansible.com/ansible/2.9/modules/parted_module.html
