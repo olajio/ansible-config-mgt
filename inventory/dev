@@ -23,4 +23,4 @@ localhost
 
 
 [nfs]
-3.84.174.9 ansible_ssh_user=centos ansible_ssh_private_key_file=~/myec2keypair.pem
+34.204.73.59 ansible_ssh_user=centos ansible_ssh_private_key_file=~/myec2keypair.pem

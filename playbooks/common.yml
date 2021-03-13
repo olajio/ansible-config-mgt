@@ -181,3 +181,9 @@
         /mnt/html *(rw,sync,no_root_squash)
         /mnt/logs *(rw,sync,no_root_squash)
         /mnt/opt *(rw,sync,no_root_squash)
+
+
+# - eqwdhvjwehwbjn
+  - name: Run command to export the filesystem
+    command:
+      cmd: /usr/sbin/exportfs -rv
